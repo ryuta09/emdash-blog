@@ -91,9 +91,9 @@ CSS variables worth knowing (see `tokens.css` for the full list):
 - `--font-body`, `--font-heading`, `--font-mono`
 - `--font-weight-heading` (600) / `--font-weight-display` (700) -- heading weights; lower them if you switch to a serif
 - `--tracking-tight` / `--tracking-snug` / `--tracking-wide` / `--tracking-wider` -- letter-spacing tokens used across headings and meta labels
-- `--content-width` (680px) -- article body column
+- `--content-width` (790px) -- article body column
 - `--wide-width` (1200px) -- max container
-- `--gutter-width` (200px) -- right sidebar (TOC) on article pages
+- `--gutter-width` (300px) -- right sidebar (TOC) on article pages
 - `--meta-col-width` (180px) -- left meta column on article pages
 - `--avatar-size-{xs,sm,md,lg}` -- byline avatar sizes at different scales
 
