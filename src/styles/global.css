@@ -2,7 +2,7 @@
   global.css -- Tailwind entry point.
 
   Preflight (Tailwind's reset) is intentionally NOT imported: the site
-  already ships its own reset in Base.astro, and Preflight would also
+  ships its own reset (the `@layer base` block below), and Preflight would also
   reset EmDash UI components (comments, search) that rely on their own
   defaults. Only the theme and utilities layers are pulled in.
 */
@@ -11,6 +11,113 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @plugin "@tailwindcss/typography";
+
+/*
+  Site-wide reset and element defaults (moved from Base.astro).
+  Kept in the `base` layer so utilities and theme.css always win.
+  EmDash UI (`emdash*` / `ec-*` classes) is excluded from the reset.
+*/
+@layer base {
+	*:where(:not([class*="emdash"]):not([class*="ec-"])),
+	*:where(:not([class*="emdash"]):not([class*="ec-"]))::before,
+	*:where(:not([class*="emdash"]):not([class*="ec-"]))::after {
+		box-sizing: border-box;
+	}
+
+	body,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	ul,
+	ol,
+	figure,
+	blockquote,
+	dl,
+	dd {
+		margin: 0;
+	}
+
+	ul,
+	ol {
+		padding: 0;
+	}
+
+	/*
+	 * Design tokens live in src/styles/tokens.css. Colors are
+	 * defined with light-dark(); these rules pin the scheme when
+	 * the footer switcher sets an explicit choice. With no class,
+	 * color-scheme: light dark follows the OS preference. The
+	 * @supports guard keeps the toggle from forcing dark UA form
+	 * controls on browsers stuck on the plain-light fallback.
+	 */
+	@supports (color: light-dark(#000, #fff)) {
+		:root.light {
+			color-scheme: light;
+		}
+
+		:root.dark {
+			color-scheme: dark;
+		}
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		line-height: var(--leading-relaxed);
+		color: var(--color-text);
+		background: var(--color-bg);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		min-height: 100vh;
+	}
+
+	a:where(:not([class*="emdash"]):not([class*="ec-"])) {
+		color: var(--color-brand);
+		text-decoration: none;
+		transition: color var(--transition-fast);
+	}
+
+	a:where(:not([class*="emdash"]):not([class*="ec-"])):hover {
+		color: var(--color-brand-hover);
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+		line-height: var(--leading-tight);
+		font-weight: var(--font-weight-heading);
+		letter-spacing: var(--tracking-snug);
+	}
+
+	h1 {
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+	}
+
+	::selection {
+		background: var(--color-brand);
+		color: var(--color-on-brand);
+	}
+}
+		
 
 /*
   Map the design tokens in tokens.css / theme.css onto Tailwind's theme.
