@@ -43,9 +43,13 @@
 	--color-on-brand: var(--color-on-brand);
 	--color-brand-ring: var(--color-brand-ring);
 
-	/* Fonts */
+	/*
+	  Fonts. Tailwind uses `font-*` for both family and weight, so the
+	  heading *family* is not mapped (h1-h6 already get it from the base
+	  styles). That keeps `font-heading` = weight 600 and
+	  `font-display` = weight 700, matching the token names.
+	*/
 	--font-body: var(--font-body);
-	--font-heading: var(--font-heading);
 	--font-mono: var(--font-mono);
 	--font-weight-heading: var(--font-weight-heading);
 	--font-weight-display: var(--font-weight-display);
