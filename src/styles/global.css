@@ -276,3 +276,271 @@
 .page-prose :where(li) {
 	margin-bottom: 0.5em;
 }
+
+/* --- posts/[slug] --- */
+.article-prose {
+	font-size: var(--font-size-lg);
+	line-height: var(--leading-relaxed);
+}
+.article-prose :where(p) {
+	margin-bottom: 1.5em;
+}
+.article-prose :where(h2) {
+	font-size: var(--font-size-2xl);
+	margin-top: 2.5em;
+	margin-bottom: 0.75em;
+	scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
+}
+.article-prose :where(h3) {
+	font-size: var(--font-size-xl);
+	margin-top: 2em;
+	margin-bottom: 0.5em;
+	scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
+}
+.article-prose :where(blockquote) {
+	margin: 2em 0;
+	padding: var(--spacing-4) var(--spacing-6);
+	background: var(--color-bg-subtle);
+	border-radius: 0 var(--radius) var(--radius) 0;
+	color: var(--color-text-secondary);
+	font-style: italic;
+}
+.article-prose :where(pre) {
+	margin: 2em 0;
+	padding: var(--spacing-5);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	line-height: 1.6;
+}
+.article-prose :where(code) {
+	padding: 0.2em 0.4em;
+}
+.article-prose :where(pre code) {
+	padding: 0;
+}
+.article-prose :where(ul, ol) {
+	margin-bottom: 1.5em;
+	padding-left: 1.5em;
+}
+.article-prose :where(li) {
+	margin-bottom: 0.5em;
+}
+.article-prose :where(img) {
+	border-radius: var(--radius-lg);
+}
+.article-prose :where(hr) {
+	margin: 3em 0;
+}
+.article-prose :where(a) {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	text-decoration-thickness: 1px;
+}
+.article-prose :where(a):hover {
+	text-decoration-thickness: 2px;
+}
+
+/*
+  ---------------------------------------------------------------------
+  Sidebar widget area on posts/[slug] (<WidgetArea name="sidebar" />).
+  Widget markup comes from EmDash, so it can't take utility classes.
+  ---------------------------------------------------------------------
+*/
+.sidebar-widgets .widget-area {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-6);
+}
+
+.sidebar-widgets .widget {
+	font-size: var(--font-size-sm);
+}
+
+.sidebar-widgets .widget__title {
+	font-size: var(--font-size-xs);
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-wide);
+	color: var(--color-muted);
+	margin-bottom: var(--spacing-3);
+}
+
+.sidebar-widgets .widget__content {
+	color: var(--color-text-secondary);
+	line-height: var(--leading-relaxed);
+}
+
+/* Sidebar search widget */
+.sidebar-widgets .widget-search {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-2);
+}
+
+.sidebar-widgets .widget-search__input {
+	width: 100%;
+	padding: var(--spacing-2) var(--spacing-3);
+	font-family: var(--font-body);
+	font-size: var(--font-size-sm);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	background: var(--color-bg);
+	color: var(--color-text);
+	transition:
+		border-color var(--transition-fast),
+		box-shadow var(--transition-fast);
+}
+
+.sidebar-widgets .widget-search__input::placeholder {
+	color: var(--color-muted);
+}
+
+.sidebar-widgets .widget-search__input:focus,
+.sidebar-widgets .widget-search__input:focus-visible {
+	outline: none;
+	border-color: var(--color-brand);
+	box-shadow: 0 0 0 3px var(--color-brand-ring);
+}
+
+.sidebar-widgets .widget-search__button {
+	display: none;
+}
+
+/* Sidebar categories widget */
+.sidebar-widgets .widget-categories {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar-widgets .widget-categories li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--spacing-2) 0;
+	border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-widgets .widget-categories li:last-child {
+	border-bottom: none;
+}
+
+.sidebar-widgets .widget-categories__link {
+	color: var(--color-text-secondary);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+}
+
+.sidebar-widgets .widget-categories__link:hover {
+	color: var(--color-text);
+}
+
+.sidebar-widgets .widget-categories__count {
+	font-size: var(--font-size-xs);
+	color: var(--color-muted);
+	background: var(--color-surface);
+	padding: var(--tag-padding-y) var(--spacing-2);
+	border-radius: var(--radius);
+}
+
+/* Sidebar tags widget - pill style */
+.sidebar-widgets .widget-tags__cloud {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-2);
+}
+
+.sidebar-widgets .widget-tags__cloud li {
+	margin: 0;
+}
+
+.sidebar-widgets .widget-tags__link {
+	display: inline-block;
+	padding: var(--tag-padding-y) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	color: var(--color-text-secondary);
+	background: var(--color-surface);
+	border-radius: var(--radius);
+	text-decoration: none;
+	transition:
+		color var(--transition-fast),
+		background var(--transition-fast);
+}
+
+.sidebar-widgets .widget-tags__link:hover {
+	color: var(--color-text);
+	background: var(--color-border);
+}
+
+.sidebar-widgets .widget-tags__count {
+	display: none;
+}
+
+/* Sidebar recent posts widget */
+.sidebar-widgets .widget-recent-posts {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar-widgets .widget-recent-posts li {
+	padding: var(--spacing-2) 0;
+	border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-widgets .widget-recent-posts li:last-child {
+	border-bottom: none;
+}
+
+.sidebar-widgets .widget-recent-posts a {
+	color: var(--color-text-secondary);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+	line-height: var(--leading-snug);
+}
+
+.sidebar-widgets .widget-recent-posts a:hover {
+	color: var(--color-text);
+}
+
+/* Sidebar archives widget */
+.sidebar-widgets .widget-archives {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar-widgets .widget-archives li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--spacing-2) 0;
+	border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-widgets .widget-archives li:last-child {
+	border-bottom: none;
+}
+
+.sidebar-widgets .widget-archives__link {
+	color: var(--color-text-secondary);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+}
+
+.sidebar-widgets .widget-archives__link:hover {
+	color: var(--color-text);
+}
+
+.sidebar-widgets .widget-archives__count {
+	font-size: var(--font-size-xs);
+	color: var(--color-muted);
+	background: var(--color-surface);
+	padding: var(--tag-padding-y) var(--spacing-2);
+	border-radius: var(--radius);
+}
+
