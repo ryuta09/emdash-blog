@@ -139,16 +139,6 @@ const publishDate =
 
 			{/* Main content */}
 			<div class="min-w-0">
-				<header class="mb-10">
-					{
-						post.data.excerpt && (
-							<p class="text-xl leading-relaxed text-text-secondary" {...post.edit.excerpt}>
-								{post.data.excerpt}
-							</p>
-						)
-					}
-				</header>
-
 				<div class="article-content prose article-prose">
 					<PortableText value={post.data.content} />
 				</div>
