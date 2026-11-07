@@ -148,7 +148,8 @@ const isLoggedIn = !!Astro.locals.user;
 			</nav>
 		</header>
 
-		<main class="flex-1">
+		{/* A page whose root has .page-center gets a flex <main> so it can fill the height */}
+		<main class="flex-1 has-[>.page-center]:flex has-[>.page-center]:flex-col">
 			<slot />
 		</main>
 
