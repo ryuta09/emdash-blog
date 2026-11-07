@@ -91,3 +91,179 @@
 	--container-content: var(--content-width);
 	--container-wide: var(--wide-width);
 }
+
+/*
+  ---------------------------------------------------------------------
+  Portable Text bodies (`prose` from @tailwindcss/typography)
+
+  Portable Text renders plain <h2>, <p>, <code>... with no classes, so
+  the body is styled here instead of with utilities in the markup.
+
+  1. `.prose` below re-points prose's colours at the site tokens and
+     strips the prose defaults this site doesn't use (backticks around
+     inline code, quote marks on blockquotes, 700-weight headings,
+     underlined 500-weight links, image margins).
+  2. Per-template spacing lives in `.page-prose` (pages/[slug]) and
+     `.article-prose` (posts/[slug]).
+
+  These rules are unlayered on purpose: prose ships in the utilities
+  layer, and unlayered CSS always wins over layered CSS.
+  ---------------------------------------------------------------------
+*/
+.prose {
+	--tw-prose-body: var(--color-text);
+	--tw-prose-headings: var(--color-text);
+	--tw-prose-lead: var(--color-text-secondary);
+	--tw-prose-links: var(--color-brand);
+	--tw-prose-bold: var(--color-text);
+	--tw-prose-counters: var(--color-text);
+	--tw-prose-bullets: var(--color-text);
+	--tw-prose-hr: var(--color-border);
+	--tw-prose-quotes: var(--color-text-secondary);
+	--tw-prose-quote-borders: var(--color-border);
+	--tw-prose-captions: var(--color-muted);
+	--tw-prose-kbd: var(--color-text);
+	--tw-prose-code: var(--color-text);
+	--tw-prose-pre-code: var(--color-text);
+	--tw-prose-pre-bg: var(--color-surface);
+	--tw-prose-th-borders: var(--color-border);
+	--tw-prose-td-borders: var(--color-border-subtle);
+
+	max-width: none;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+/* Headings: same weight / leading as the rest of the site */
+.prose :where(h1, h2, h3, h4, h5, h6) {
+	font-weight: var(--font-weight-heading);
+	line-height: var(--leading-tight);
+}
+.prose :where(h1) {
+	font-weight: var(--font-weight-display);
+}
+
+/* Text blocks start flush; each template sets the bottom spacing */
+.prose :where(p, ul, ol) {
+	margin-top: 0;
+}
+.prose :where(li) {
+	margin-top: 0;
+	padding-inline-start: 0;
+}
+
+/* Links: brand colour, no prose weight/underline */
+.prose :where(a) {
+	color: var(--color-brand);
+	font-weight: inherit;
+	text-decoration: none;
+}
+.prose :where(a):hover {
+	color: var(--color-brand-hover);
+}
+
+/* Inline code: tinted chip, no backticks */
+.prose :where(code) {
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+	font-weight: inherit;
+	background: var(--color-surface);
+	border-radius: var(--radius);
+}
+.prose :where(code)::before,
+.prose :where(code)::after {
+	content: none;
+}
+
+/* Code blocks */
+.prose :where(pre) {
+	color: var(--color-text);
+	font-family: var(--font-mono);
+	font-size: var(--font-size-sm);
+	font-weight: inherit;
+	overflow-x: auto;
+}
+.prose :where(pre code) {
+	background: none;
+	padding: 0;
+}
+
+/* Blockquotes: no quote marks, no prose weight */
+.prose :where(blockquote) {
+	font-weight: inherit;
+	font-style: normal;
+	quotes: none;
+	border-inline-start: 3px solid var(--color-border);
+}
+.prose :where(blockquote p:first-of-type)::before,
+.prose :where(blockquote p:last-of-type)::after {
+	content: none;
+}
+
+/*
+  Rules and table borders. Prose only sets border width/colour and
+  relies on Preflight for `border-style: solid`; Preflight is off here,
+  so the full shorthand is spelled out.
+*/
+.prose :where(hr) {
+	border: none;
+	border-top: 1px solid var(--color-border);
+}
+.prose :where(thead) {
+	border-bottom: 1px solid var(--tw-prose-th-borders);
+}
+.prose :where(tbody tr) {
+	border-bottom: 1px solid var(--tw-prose-td-borders);
+}
+.prose :where(tbody tr:last-child) {
+	border-bottom: none;
+}
+.prose :where(tfoot) {
+	border-top: 1px solid var(--tw-prose-th-borders);
+}
+
+/* Images sit flush; the editor controls spacing around them */
+.prose :where(img) {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+/* --- pages/[slug] --- */
+.page-prose :where(p) {
+	margin-bottom: 1.5em;
+}
+.page-prose :where(h2) {
+	font-size: var(--font-size-2xl);
+	margin-top: 2em;
+	margin-bottom: 0.75em;
+}
+.page-prose :where(h3) {
+	font-size: var(--font-size-xl);
+	margin-top: 1.75em;
+	margin-bottom: 0.5em;
+}
+.page-prose :where(blockquote) {
+	margin: 1.5em 0;
+	padding-left: var(--spacing-6);
+	color: var(--color-muted);
+}
+.page-prose :where(pre) {
+	margin: 1.5em 0;
+	padding: var(--spacing-4);
+	background: var(--color-surface);
+	border-radius: var(--radius);
+	line-height: inherit;
+}
+.page-prose :where(code) {
+	padding: 0.15em 0.3em;
+}
+.page-prose :where(pre code) {
+	padding: 0;
+}
+.page-prose :where(ul, ol) {
+	margin-bottom: 1.5em;
+	padding-left: var(--spacing-5);
+}
+.page-prose :where(li) {
+	margin-bottom: 0.5em;
+}
