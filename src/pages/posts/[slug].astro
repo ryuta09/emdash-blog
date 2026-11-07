@@ -8,7 +8,6 @@ import {
 	getSiteSettings,
 } from "emdash";
 import { Image, PortableText, WidgetArea } from "emdash/ui";
-import { Comments, CommentForm } from "emdash/ui/comments";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
@@ -124,13 +123,17 @@ const publishDate =
 			)
 		}
 
-		{/* Three-column layout */}
+		{/* Title: centred, independent of the body/TOC columns */}
+		<header class="article-head">
+			<h1 class="article-title" {...post.edit.title}>{post.data.title}</h1>
+		</header>
+
+		{/* Two-column layout: body + TOC */}
 		<div class="article-grid">
 
 			{/* Main content */}
 			<div class="article-main">
 				<header class="article-header">
-					<h1 class="article-title" {...post.edit.title}>{post.data.title}</h1>
 					{
 						post.data.excerpt && (
 							<p class="article-excerpt" {...post.edit.excerpt}>
@@ -142,11 +145,6 @@ const publishDate =
 
 				<div class="article-content">
 					<PortableText value={post.data.content} />
-				</div>
-
-				<div class="article-comments">
-					<Comments collection="posts" contentId={post.data.id} threaded />
-					<CommentForm collection="posts" contentId={post.data.id} />
 				</div>
 			</div>
 
@@ -171,7 +169,7 @@ const publishDate =
 		otherPostsWithTags.length > 0 && (
 			<section class="more-posts">
 				<div class="more-inner">
-					<h2 class="more-title">Continue reading</h2>
+					<h2 class="more-title">関連記事</h2>
 					<div class="more-grid">
 						{otherPostsWithTags.map(
 							({ post: p, tags: postTags, bylines: postBylines }) => (
@@ -283,7 +281,20 @@ const publishDate =
 		object-fit: cover;
 	}
 
-	/* Three-column grid */
+	/* Centred title block between the hero and the columns */
+	.article-head {
+		max-width: calc(var(--content-width) + var(--gutter-width) + var(--spacing-10));
+		margin: 0 auto;
+		padding: 0 var(--spacing-6);
+		text-align: center;
+	}
+
+	/* No featured image: give the title the same top space the hero would have */
+	.article-head:first-child {
+		margin-top: var(--spacing-16);
+	}
+
+	/* Two-column grid: body + TOC */
 	.article-grid {
 		display: grid;
 		grid-template-columns:
@@ -416,6 +427,7 @@ const publishDate =
 		line-height: var(--leading-tight);
 		letter-spacing: var(--tracking-tight);
 		margin-bottom: var(--spacing-4);
+		text-align: center;
 	}
 
 	.article-excerpt {
@@ -494,7 +506,6 @@ const publishDate =
 	}
 
 	.article-content :global(img) {
-		margin: 2em 0;
 		border-radius: var(--radius-lg);
 	}
 
@@ -862,6 +873,7 @@ const publishDate =
 			border-radius: var(--radius);
 		}
 
+		.article-head,
 		.article-grid {
 			padding: 0 var(--spacing-4);
 		}
