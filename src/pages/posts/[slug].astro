@@ -442,6 +442,11 @@ const publishDate =
 		line-height: var(--leading-relaxed);
 	}
 
+	/* First visible block sits flush (skips PortableText's hidden unknown-type placeholders) */
+	.article-content > :global(:nth-child(1 of :not([data-portabletext-unknown]))) {
+		margin-top: 0;
+	}
+
 	.article-content :global(p) {
 		margin-bottom: 1.5em;
 	}

@@ -143,6 +143,15 @@
 	font-weight: var(--font-weight-display);
 }
 
+/*
+  No top margin on the first block, so a body that opens with a heading
+  sits flush. Hidden placeholders PortableText emits for unknown block
+  types ([data-portabletext-unknown]) are skipped when finding "first".
+*/
+.prose > :nth-child(1 of :not([data-portabletext-unknown])) {
+	margin-top: 0;
+}
+
 /* Text blocks start flush; each template sets the bottom spacing */
 .prose :where(p, ul, ol) {
 	margin-top: 0;
