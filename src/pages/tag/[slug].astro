@@ -53,17 +53,17 @@ const filteredPosts = posts.map((post) => ({
 	title={`Posts tagged "${term.label}"`}
 	description={`All posts tagged with ${term.label}`}
 >
-	<section class="archive-section">
-		<header class="archive-header">
-			<span class="archive-label">Tag</span>
-			<h1 class="archive-title">{term.label}</h1>
+	<section class="mx-auto max-w-wide px-6 py-12">
+		<header class="mb-12 border-b border-border-subtle pb-8">
+			<span class="mb-2 block text-xs font-medium uppercase tracking-wider text-brand">Tag</span>
+			<h1 class="mb-2 text-4xl font-display tracking-tight">{term.label}</h1>
 		</header>
 
 		{
 			filteredPosts.length === 0 ? (
-				<p class="no-posts">No posts with this tag yet.</p>
+				<p class="text-muted">No posts with this tag yet.</p>
 			) : (
-				<div class="posts-grid">
+				<div class="grid grid-cols-3 gap-x-8 gap-y-12 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1">
 					{filteredPosts.map(({ post, tags }) => (
 						<PostCard
 							title={post.data.title}
@@ -79,7 +79,7 @@ const filteredPosts = posts.map((post) => ({
 				</div>
 			)
 		}
-		<nav class="pagination" aria-label="Pagination">
+		<nav aria-label="Pagination">
 			{cursor && <a href={`/tag/${term.slug}`}>First page</a>}
 			{
 				nextCursor && (
@@ -94,55 +94,3 @@ const filteredPosts = posts.map((post) => ({
 	</section>
 </Base>
 
-<style>
-	.archive-section {
-		max-width: var(--wide-width);
-		margin: 0 auto;
-		padding: var(--spacing-12) var(--spacing-6);
-	}
-
-	.archive-header {
-		margin-bottom: var(--spacing-12);
-		padding-bottom: var(--spacing-8);
-		border-bottom: 1px solid var(--color-border-subtle);
-	}
-
-	.archive-label {
-		display: block;
-		font-size: var(--font-size-xs);
-		font-weight: 500;
-		color: var(--color-brand);
-		text-transform: uppercase;
-		letter-spacing: var(--tracking-wider);
-		margin-bottom: var(--spacing-2);
-	}
-
-	.archive-title {
-		font-size: var(--font-size-4xl);
-		font-weight: var(--font-weight-display);
-		letter-spacing: var(--tracking-tight);
-		margin-bottom: var(--spacing-2);
-	}
-
-	.posts-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-12) var(--spacing-8);
-	}
-
-	.no-posts {
-		color: var(--color-muted);
-	}
-
-	@media (max-width: 900px) {
-		.posts-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	@media (max-width: 600px) {
-		.posts-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-</style>

@@ -1,0 +1,653 @@
+/*
+  global.css -- Tailwind entry point.
+
+  Preflight (Tailwind's reset) is intentionally NOT imported: the site
+  ships its own reset (the `@layer base` block below), and Preflight would also
+  reset EmDash UI components (comments, search) that rely on their own
+  defaults. Only the theme and utilities layers are pulled in.
+*/
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@plugin "@tailwindcss/typography";
+
+/*
+  Site-wide reset and element defaults (moved from Base.astro).
+  Kept in the `base` layer so utilities and theme.css always win.
+  EmDash UI (`emdash*` / `ec-*` classes) is excluded from the reset.
+*/
+@layer base {
+	*:where(:not([class*="emdash"]):not([class*="ec-"])),
+	*:where(:not([class*="emdash"]):not([class*="ec-"]))::before,
+	*:where(:not([class*="emdash"]):not([class*="ec-"]))::after {
+		box-sizing: border-box;
+	}
+
+	body,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	ul,
+	ol,
+	figure,
+	blockquote,
+	dl,
+	dd {
+		margin: 0;
+	}
+
+	ul,
+	ol {
+		padding: 0;
+	}
+
+	/*
+	 * Design tokens live in src/styles/tokens.css. Colors are
+	 * defined with light-dark(); these rules pin the scheme when
+	 * the footer switcher sets an explicit choice. With no class,
+	 * color-scheme: light dark follows the OS preference. The
+	 * @supports guard keeps the toggle from forcing dark UA form
+	 * controls on browsers stuck on the plain-light fallback.
+	 */
+	@supports (color: light-dark(#000, #fff)) {
+		:root.light {
+			color-scheme: light;
+		}
+
+		:root.dark {
+			color-scheme: dark;
+		}
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		line-height: var(--leading-relaxed);
+		color: var(--color-text);
+		background: var(--color-bg);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		min-height: 100vh;
+	}
+
+	a:where(:not([class*="emdash"]):not([class*="ec-"])) {
+		color: var(--color-brand);
+		text-decoration: none;
+		transition: color var(--transition-fast);
+	}
+
+	a:where(:not([class*="emdash"]):not([class*="ec-"])):hover {
+		color: var(--color-brand-hover);
+	}
+
+	img {
+		max-width: 100%;
+		height: auto;
+		display: block;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+		line-height: var(--leading-tight);
+		font-weight: var(--font-weight-heading);
+		letter-spacing: var(--tracking-snug);
+	}
+
+	h1 {
+		font-weight: var(--font-weight-display);
+		letter-spacing: var(--tracking-tight);
+	}
+
+	::selection {
+		background: var(--color-brand);
+		color: var(--color-on-brand);
+	}
+}
+		
+
+/*
+  Map the design tokens in tokens.css / theme.css onto Tailwind's theme.
+
+  `inline reference` makes utilities point straight at the existing
+  token variables (e.g. `.text-muted { color: var(--color-muted) }`)
+  without Tailwind emitting its own copies, so tokens.css and theme.css
+  stay the single source of truth -- light-dark() and theme.css
+  overrides keep working.
+
+  Namespaces that overlap with the tokens are cleared first so
+  Tailwind's defaults (different line-heights, tracking, shadows, the
+  colour palette) can't leak in.
+*/
+@theme inline reference {
+	/* Colours: black, white and one blue -- no default palette */
+	--color-*: initial;
+	--color-white: #fff;
+	--color-black: #000;
+	--color-bg: var(--color-bg);
+	--color-bg-subtle: var(--color-bg-subtle);
+	--color-text: var(--color-text);
+	--color-text-secondary: var(--color-text-secondary);
+	--color-muted: var(--color-muted);
+	--color-border: var(--color-border);
+	--color-border-subtle: var(--color-border-subtle);
+	--color-surface: var(--color-surface);
+	--color-brand: var(--color-brand);
+	--color-brand-hover: var(--color-brand-hover);
+	--color-on-brand: var(--color-on-brand);
+	--color-brand-ring: var(--color-brand-ring);
+
+	/*
+	  Fonts. Tailwind uses `font-*` for both family and weight, so the
+	  heading *family* is not mapped (h1-h6 already get it from the base
+	  styles). That keeps `font-heading` = weight 600 and
+	  `font-display` = weight 700, matching the token names.
+	*/
+	--font-body: var(--font-body);
+	--font-mono: var(--font-mono);
+	--font-weight-heading: var(--font-weight-heading);
+	--font-weight-display: var(--font-weight-display);
+
+	/* Type scale (font-size only; line-height comes from leading-*) */
+	--text-*: initial;
+	--text-xs: var(--font-size-xs);
+	--text-sm: var(--font-size-sm);
+	--text-base: var(--font-size-base);
+	--text-lg: var(--font-size-lg);
+	--text-xl: var(--font-size-xl);
+	--text-2xl: var(--font-size-2xl);
+	--text-3xl: var(--font-size-3xl);
+	--text-4xl: var(--font-size-4xl);
+	--text-5xl: var(--font-size-5xl);
+
+	--leading-*: initial;
+	--leading-tight: var(--leading-tight);
+	--leading-snug: var(--leading-snug);
+	--leading-normal: var(--leading-normal);
+	--leading-relaxed: var(--leading-relaxed);
+
+	--tracking-*: initial;
+	--tracking-tight: var(--tracking-tight);
+	--tracking-snug: var(--tracking-snug);
+	--tracking-wide: var(--tracking-wide);
+	--tracking-wider: var(--tracking-wider);
+
+	/* Radius: `rounded` = --radius, `rounded-lg` = --radius-lg */
+	--radius-*: initial;
+	--radius: var(--radius);
+	--radius-lg: var(--radius-lg);
+
+	--shadow-*: initial;
+	--shadow-sm: var(--shadow-sm);
+	--shadow-lg: var(--shadow-lg);
+
+	/* Layout widths: max-w-content, max-w-wide */
+	--container-content: var(--content-width);
+	--container-wide: var(--wide-width);
+}
+
+/*
+  ---------------------------------------------------------------------
+  Portable Text bodies (`prose` from @tailwindcss/typography)
+
+  Portable Text renders plain <h2>, <p>, <code>... with no classes, so
+  the body is styled here instead of with utilities in the markup.
+
+  1. `.prose` below re-points prose's colours at the site tokens and
+     strips the prose defaults this site doesn't use (backticks around
+     inline code, quote marks on blockquotes, 700-weight headings,
+     underlined 500-weight links, image margins).
+  2. Per-template spacing lives in `.page-prose` (pages/[slug]) and
+     `.article-prose` (posts/[slug]).
+
+  These rules are unlayered on purpose: prose ships in the utilities
+  layer, and unlayered CSS always wins over layered CSS.
+  ---------------------------------------------------------------------
+*/
+.prose {
+	--tw-prose-body: var(--color-text);
+	--tw-prose-headings: var(--color-text);
+	--tw-prose-lead: var(--color-text-secondary);
+	--tw-prose-links: var(--color-brand);
+	--tw-prose-bold: var(--color-text);
+	--tw-prose-counters: var(--color-text);
+	--tw-prose-bullets: var(--color-text);
+	--tw-prose-hr: var(--color-border);
+	--tw-prose-quotes: var(--color-text-secondary);
+	--tw-prose-quote-borders: var(--color-border);
+	--tw-prose-captions: var(--color-muted);
+	--tw-prose-kbd: var(--color-text);
+	--tw-prose-code: var(--color-text);
+	--tw-prose-pre-code: var(--color-text);
+	--tw-prose-pre-bg: var(--color-surface);
+	--tw-prose-th-borders: var(--color-border);
+	--tw-prose-td-borders: var(--color-border-subtle);
+
+	max-width: none;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+/* Headings: same weight / leading as the rest of the site */
+.prose :where(h1, h2, h3, h4, h5, h6) {
+	font-weight: var(--font-weight-heading);
+	line-height: var(--leading-tight);
+}
+.prose :where(h1) {
+	font-weight: var(--font-weight-display);
+}
+
+/*
+  No top margin on the first block, so a body that opens with a heading
+  sits flush. Hidden placeholders PortableText emits for unknown block
+  types ([data-portabletext-unknown]) are skipped when finding "first".
+*/
+.prose > :nth-child(1 of :not([data-portabletext-unknown])) {
+	margin-top: 0;
+}
+
+/* Text blocks start flush; each template sets the bottom spacing */
+.prose :where(p, ul, ol) {
+	margin-top: 0;
+}
+.prose :where(li) {
+	margin-top: 0;
+	padding-inline-start: 0;
+}
+
+/* Links: brand colour, no prose weight/underline */
+.prose :where(a) {
+	color: var(--color-brand);
+	font-weight: inherit;
+	text-decoration: none;
+}
+.prose :where(a):hover {
+	color: var(--color-brand-hover);
+}
+
+/* Inline code: tinted chip, no backticks */
+.prose :where(code) {
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+	font-weight: inherit;
+	background: var(--color-surface);
+	border-radius: var(--radius);
+}
+.prose :where(code)::before,
+.prose :where(code)::after {
+	content: none;
+}
+
+/* Code blocks */
+.prose :where(pre) {
+	color: var(--color-text);
+	font-family: var(--font-mono);
+	font-size: var(--font-size-sm);
+	font-weight: inherit;
+	overflow-x: auto;
+}
+.prose :where(pre code) {
+	background: none;
+	padding: 0;
+}
+
+/* Blockquotes: no quote marks, no prose weight */
+.prose :where(blockquote) {
+	font-weight: inherit;
+	font-style: normal;
+	quotes: none;
+	border-inline-start: 3px solid var(--color-border);
+}
+.prose :where(blockquote p:first-of-type)::before,
+.prose :where(blockquote p:last-of-type)::after {
+	content: none;
+}
+
+/*
+  Rules and table borders. Prose only sets border width/colour and
+  relies on Preflight for `border-style: solid`; Preflight is off here,
+  so the full shorthand is spelled out.
+*/
+.prose :where(hr) {
+	border: none;
+	border-top: 1px solid var(--color-border);
+}
+.prose :where(thead) {
+	border-bottom: 1px solid var(--tw-prose-th-borders);
+}
+.prose :where(tbody tr) {
+	border-bottom: 1px solid var(--tw-prose-td-borders);
+}
+.prose :where(tbody tr:last-child) {
+	border-bottom: none;
+}
+.prose :where(tfoot) {
+	border-top: 1px solid var(--tw-prose-th-borders);
+}
+
+/* Images sit flush; the editor controls spacing around them */
+.prose :where(img) {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+/* --- pages/[slug] --- */
+.page-prose :where(p) {
+	margin-bottom: 1.5em;
+}
+.page-prose :where(h2) {
+	font-size: var(--font-size-2xl);
+	margin-top: 2em;
+	margin-bottom: 0.75em;
+}
+.page-prose :where(h3) {
+	font-size: var(--font-size-xl);
+	margin-top: 1.75em;
+	margin-bottom: 0.5em;
+}
+.page-prose :where(blockquote) {
+	margin: 1.5em 0;
+	padding-left: var(--spacing-6);
+	color: var(--color-muted);
+}
+.page-prose :where(pre) {
+	margin: 1.5em 0;
+	padding: var(--spacing-4);
+	background: var(--color-surface);
+	border-radius: var(--radius);
+	line-height: inherit;
+}
+.page-prose :where(code) {
+	padding: 0.15em 0.3em;
+}
+.page-prose :where(pre code) {
+	padding: 0;
+}
+.page-prose :where(ul, ol) {
+	margin-bottom: 1.5em;
+	padding-left: var(--spacing-5);
+}
+.page-prose :where(li) {
+	margin-bottom: 0.5em;
+}
+
+/* --- posts/[slug] --- */
+.article-prose {
+	font-size: var(--font-size-lg);
+	line-height: var(--leading-relaxed);
+}
+.article-prose :where(p) {
+	margin-bottom: 1.5em;
+}
+.article-prose :where(h2) {
+	font-size: var(--font-size-2xl);
+	margin-top: 2.5em;
+	margin-bottom: 0.75em;
+	scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
+}
+.article-prose :where(h3) {
+	font-size: var(--font-size-xl);
+	margin-top: 2em;
+	margin-bottom: 0.5em;
+	scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
+}
+.article-prose :where(blockquote) {
+	margin: 2em 0;
+	padding: var(--spacing-4) var(--spacing-6);
+	background: var(--color-bg-subtle);
+	border-radius: 0 var(--radius) var(--radius) 0;
+	color: var(--color-text-secondary);
+	font-style: italic;
+}
+.article-prose :where(pre) {
+	margin: 2em 0;
+	padding: var(--spacing-5);
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	line-height: 1.6;
+}
+.article-prose :where(code) {
+	padding: 0.2em 0.4em;
+}
+.article-prose :where(pre code) {
+	padding: 0;
+}
+.article-prose :where(ul, ol) {
+	margin-bottom: 1.5em;
+	padding-left: 1.5em;
+}
+.article-prose :where(li) {
+	margin-bottom: 0.5em;
+}
+.article-prose :where(img) {
+	border-radius: var(--radius-lg);
+}
+.article-prose :where(hr) {
+	margin: 3em 0;
+}
+.article-prose :where(a) {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	text-decoration-thickness: 1px;
+}
+.article-prose :where(a):hover {
+	text-decoration-thickness: 2px;
+}
+
+/*
+  ---------------------------------------------------------------------
+  Sidebar widget area on posts/[slug] (<WidgetArea name="sidebar" />).
+  Widget markup comes from EmDash, so it can't take utility classes.
+  ---------------------------------------------------------------------
+*/
+.sidebar-widgets .widget-area {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-6);
+}
+
+.sidebar-widgets .widget {
+	font-size: var(--font-size-sm);
+}
+
+.sidebar-widgets .widget__title {
+	font-size: var(--font-size-xs);
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: var(--tracking-wide);
+	color: var(--color-muted);
+	margin-bottom: var(--spacing-3);
+}
+
+.sidebar-widgets .widget__content {
+	color: var(--color-text-secondary);
+	line-height: var(--leading-relaxed);
+}
+
+/* Sidebar search widget */
+.sidebar-widgets .widget-search {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-2);
+}
+
+.sidebar-widgets .widget-search__input {
+	width: 100%;
+	padding: var(--spacing-2) var(--spacing-3);
+	font-family: var(--font-body);
+	font-size: var(--font-size-sm);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	background: var(--color-bg);
+	color: var(--color-text);
+	transition:
+		border-color var(--transition-fast),
+		box-shadow var(--transition-fast);
+}
+
+.sidebar-widgets .widget-search__input::placeholder {
+	color: var(--color-muted);
+}
+
+.sidebar-widgets .widget-search__input:focus,
+.sidebar-widgets .widget-search__input:focus-visible {
+	outline: none;
+	border-color: var(--color-brand);
+	box-shadow: 0 0 0 3px var(--color-brand-ring);
+}
+
+.sidebar-widgets .widget-search__button {
+	display: none;
+}
+
+/* Sidebar categories widget */
+.sidebar-widgets .widget-categories {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar-widgets .widget-categories li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--spacing-2) 0;
+	border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-widgets .widget-categories li:last-child {
+	border-bottom: none;
+}
+
+.sidebar-widgets .widget-categories__link {
+	color: var(--color-text-secondary);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+}
+
+.sidebar-widgets .widget-categories__link:hover {
+	color: var(--color-text);
+}
+
+.sidebar-widgets .widget-categories__count {
+	font-size: var(--font-size-xs);
+	color: var(--color-muted);
+	background: var(--color-surface);
+	padding: var(--tag-padding-y) var(--spacing-2);
+	border-radius: var(--radius);
+}
+
+/* Sidebar tags widget - pill style */
+.sidebar-widgets .widget-tags__cloud {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-2);
+}
+
+.sidebar-widgets .widget-tags__cloud li {
+	margin: 0;
+}
+
+.sidebar-widgets .widget-tags__link {
+	display: inline-block;
+	padding: var(--tag-padding-y) var(--spacing-2);
+	font-size: var(--font-size-xs);
+	color: var(--color-text-secondary);
+	background: var(--color-surface);
+	border-radius: var(--radius);
+	text-decoration: none;
+	transition:
+		color var(--transition-fast),
+		background var(--transition-fast);
+}
+
+.sidebar-widgets .widget-tags__link:hover {
+	color: var(--color-text);
+	background: var(--color-border);
+}
+
+.sidebar-widgets .widget-tags__count {
+	display: none;
+}
+
+/* Sidebar recent posts widget */
+.sidebar-widgets .widget-recent-posts {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar-widgets .widget-recent-posts li {
+	padding: var(--spacing-2) 0;
+	border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-widgets .widget-recent-posts li:last-child {
+	border-bottom: none;
+}
+
+.sidebar-widgets .widget-recent-posts a {
+	color: var(--color-text-secondary);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+	line-height: var(--leading-snug);
+}
+
+.sidebar-widgets .widget-recent-posts a:hover {
+	color: var(--color-text);
+}
+
+/* Sidebar archives widget */
+.sidebar-widgets .widget-archives {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.sidebar-widgets .widget-archives li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--spacing-2) 0;
+	border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-widgets .widget-archives li:last-child {
+	border-bottom: none;
+}
+
+.sidebar-widgets .widget-archives__link {
+	color: var(--color-text-secondary);
+	text-decoration: none;
+	transition: color var(--transition-fast);
+}
+
+.sidebar-widgets .widget-archives__link:hover {
+	color: var(--color-text);
+}
+
+.sidebar-widgets .widget-archives__count {
+	font-size: var(--font-size-xs);
+	color: var(--color-muted);
+	background: var(--color-surface);
+	padding: var(--tag-padding-y) var(--spacing-2);
+	border-radius: var(--radius);
+}
+
