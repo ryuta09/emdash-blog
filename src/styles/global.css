@@ -245,6 +245,7 @@
 .prose :where(h1, h2, h3, h4, h5, h6) {
 	font-weight: var(--font-weight-heading);
 	line-height: var(--leading-tight);
+	margin: 0 0 0.75em;
 }
 .prose :where(h1) {
 	font-weight: var(--font-weight-display);
@@ -350,13 +351,9 @@
 }
 .page-prose :where(h2) {
 	font-size: var(--font-size-2xl);
-	margin-top: 2em;
-	margin-bottom: 0.75em;
 }
 .page-prose :where(h3) {
 	font-size: var(--font-size-xl);
-	margin-top: 1.75em;
-	margin-bottom: 0.5em;
 }
 .page-prose :where(blockquote) {
 	margin: 1.5em 0;
@@ -394,14 +391,10 @@
 }
 .article-prose :where(h2) {
 	font-size: var(--font-size-2xl);
-	margin-top: 2.5em;
-	margin-bottom: 0.75em;
 	scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
 }
 .article-prose :where(h3) {
 	font-size: var(--font-size-xl);
-	margin-top: 2em;
-	margin-bottom: 0.5em;
 	scroll-margin-top: calc(var(--nav-height) + var(--spacing-4));
 }
 .article-prose :where(blockquote) {
