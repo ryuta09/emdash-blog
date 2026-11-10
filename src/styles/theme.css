@@ -25,4 +25,22 @@
 */
 
 :root {
+	/* Article body + table-of-contents cards (posts/[slug]) */
+	--color-card: light-dark(#fafafa, #0d1426);
+	--color-card-border: light-dark(#e5e5e5, #1a2238);
+
+	/* Table of contents: links, current section, and its marker line */
+	--color-toc-text: light-dark(#6b7280, #8a93a8);
+	--color-toc-active: light-dark(#1a1a1a, #f1f3f7);
+	--color-toc-accent: #00d4ff;
+}
+
+/* Light values for browsers without light-dark(); see tokens.css */
+@supports not (color: light-dark(#000, #fff)) {
+	:root {
+		--color-card: #fafafa;
+		--color-card-border: #e5e5e5;
+		--color-toc-text: #6b7280;
+		--color-toc-active: #1a1a1a;
+	}
 }

@@ -149,6 +149,11 @@
 	--color-brand-hover: var(--color-brand-hover);
 	--color-on-brand: var(--color-on-brand);
 	--color-brand-ring: var(--color-brand-ring);
+	--color-card: var(--color-card);
+	--color-card-border: var(--color-card-border);
+	--color-toc-text: var(--color-toc-text);
+	--color-toc-active: var(--color-toc-active);
+	--color-toc-accent: var(--color-toc-accent);
 
 	/*
 	  Fonts. Tailwind uses `font-*` for both family and weight, so the
@@ -383,7 +388,7 @@
 
 /* --- posts/[slug] --- */
 .article-prose {
-	font-size: var(--font-size-lg);
+	font-size: var(--font-size-base);
 	line-height: var(--leading-relaxed);
 }
 .article-prose :where(p) {
@@ -644,3 +649,54 @@
 	border-radius: var(--radius);
 }
 
+
+/*
+  ---------------------------------------------------------------------
+  Code block syntax highlighting (components/CodeBlock.astro)
+
+  highlight.js emits `.hljs-*` spans; the colours match the admin
+  editor's code block so the published page looks like the editor.
+  The block itself (background, padding, border) keeps the prose styles.
+  ---------------------------------------------------------------------
+*/
+:root {
+	--code-muted: light-dark(#57606a, #c9d1d9);
+	--code-keyword: light-dark(#b8172a, #ffc1bb);
+	--code-string: light-dark(#0a3069, #b9ddff);
+	--code-number: light-dark(#0550ae, #a8d5ff);
+	--code-title: light-dark(#7545c7, #e5ccff);
+}
+
+/* Light values for browsers without light-dark(); see tokens.css */
+@supports not (color: light-dark(#000, #fff)) {
+	:root {
+		--code-muted: #57606a;
+		--code-keyword: #b8172a;
+		--code-string: #0a3069;
+		--code-number: #0550ae;
+		--code-title: #7545c7;
+	}
+}
+
+.code-block-filename {
+	margin-bottom: calc(var(--spacing-2) * -1);
+	font-family: var(--font-mono);
+	font-size: var(--font-size-sm);
+	color: var(--color-muted);
+}
+
+.hljs :is(.hljs-comment, .hljs-quote) {
+	color: var(--code-muted);
+}
+.hljs :is(.hljs-keyword, .hljs-literal, .hljs-selector-tag, .hljs-section, .hljs-link, .hljs-deletion) {
+	color: var(--code-keyword);
+}
+.hljs :is(.hljs-string, .hljs-attr, .hljs-attribute, .hljs-symbol, .hljs-bullet, .hljs-addition) {
+	color: var(--code-string);
+}
+.hljs :is(.hljs-number, .hljs-meta) {
+	color: var(--code-number);
+}
+.hljs :is(.hljs-title, .hljs-name, .hljs-type, .hljs-built_in, .hljs-selector-id, .hljs-selector-class) {
+	color: var(--code-title);
+}

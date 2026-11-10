@@ -1,0 +1,34 @@
+---
+/**
+ * Portable Text code block with syntax highlighting.
+ *
+ * Replaces EmDash's default `code` block (which renders plain text) via the
+ * `components` prop of <PortableText>. Highlighting runs on the server, so
+ * no client-side JavaScript is shipped. Colours live in global.css.
+ */
+import { highlightCode } from "../utils/highlight";
+
+export interface Props {
+	node: {
+		_type: "code";
+		_key: string;
+		code: string;
+		language?: string;
+		filename?: string;
+	};
+}
+
+const { node } = Astro.props;
+
+if (!node?.code) {
+	return null;
+}
+
+const { html, language } = highlightCode(node.code, node.language);
+const languageClass = language ? `language-${language}` : undefined;
+---
+
+<div class="code-block">
+	{node.filename && <div class="code-block-filename">{node.filename}</div>}
+	<pre class={languageClass}><code class:list={["hljs", languageClass]} set:html={html} /></pre>
+</div>

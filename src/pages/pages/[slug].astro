@@ -6,6 +6,7 @@ import {
 	getSiteSettings,
 } from "emdash";
 import { PortableText } from "emdash/ui";
+import { portableTextComponents } from "../../utils/portable-text";
 import Base from "../../layouts/Base.astro";
 import { resolveBlogSiteIdentity } from "../../utils/site-identity";
 
@@ -47,7 +48,7 @@ const seo = getSeoMeta(page, {
 		</header>
 
 		<div class="prose page-prose" {...page.edit.content}>
-			<PortableText value={page.data.content} />
+			<PortableText value={page.data.content} components={portableTextComponents} />
 		</div>
 	</article>
 </Base>
